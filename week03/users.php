@@ -7,18 +7,20 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>Users</h1>
+    <a href="user.php">Create new user</a><br>
     <?php
 
     require_once 'app.php';
     $sql = 'select * from users';
     $stmnt = $db->prepare($sql);
     $stmnt->execute([]);
-$users = $stmnt->fetchAll();
+    $users = $stmnt->fetchAll();
 
-foreach($users as $user) {
-    $user = (object) $user;
-    echo '<a href="user.php?id=' . $user->id . '">' . $user->firstname . '</a><br>';
-}
+    foreach($users as $user) {
+        $user = (object) $user;
+        echo '<a href="user.php?id=' . $user->id . '">' . $user->firstname . '</a><br>';
+    }
 
     ?>
 </body>

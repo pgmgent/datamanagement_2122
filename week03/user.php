@@ -1,10 +1,18 @@
 <?php
     require_once 'app.php';
 
+    $user_id = $_GET['id'] ?? 0;
+
+    if($user_id) {
+        $user = getUserById($user_id);
+    }
+    else {
+        $user = new stdClass();
+    }
+
     if( isset($_POST['create']) ) {
         $valid = true;
-        $user = new stdClass();
-
+      
         $user->firstname = trim( $_POST['firstname'] );
         $user->lastname = trim( $_POST['lastname'] );
         $user->email = trim( $_POST['email'] );
@@ -14,13 +22,21 @@
             $valid = false;
         }
 
-        if ( emailExists( $user->email ) ) {
-            echo "Email bestaat al $email_count x" ;
+        if ( !$user_id && emailExists( $user->email ) ) {
+            echo "Email bestaat al x" ;
             $valid = false;
         }
 
         if($valid) {
-           createUser($user);
+            if($user_id) {
+                updateUser($user);
+                echo "Succesvol $user_id geupdated";
+
+            } else {
+                $user_id = createUser($user);
+                echo "Succesvol $user_id aangemaakt";
+                header('Location:users.php');
+            }
         }
         else {
             //give feedback
@@ -45,15 +61,15 @@
             <legend>Profile</legend>
             <label>
                 <span>Firstname</span>
-                <input type="text" name="firstname" maxlenght="128" required>
+                <input type="text" name="firstname" maxlenght="128" value="<?php echo $user->firstname ?? ''; ?>" required>
             </label>
             <label>
                 <span>Lastname</span>
-                <input type="text" name="lastname" maxlenght="128" required>
+                <input type="text" name="lastname" maxlenght="128" value="<?php echo $user->lastname ?? ''; ?>" required>
             </label>
             <label>
                 <span>E-mail</span>
-                <input type="email" name="email" maxlenght="256" required>
+                <input type="email" name="email" maxlenght="256" value="<?php echo $user->email ?? ''; ?>" required>
             </label>
             <label>
                 <span>Password</span>
