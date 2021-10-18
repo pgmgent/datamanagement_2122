@@ -4,10 +4,11 @@
     $user_id = $_GET['id'] ?? 0;
 
     if($user_id) {
-        $user = getUserById($user_id);
+        $user = new User();
+        $user->getById($user_id);
     }
     else {
-        $user = new stdClass();
+        $user = new User();
     }
 
     if( isset($_POST['create']) ) {
@@ -22,7 +23,7 @@
             $valid = false;
         }
 
-        if ( !$user_id && emailExists( $user->email ) ) {
+        if ( !$user_id && $user->emailExists( $user->email ) ) {
             echo "Email bestaat al x" ;
             $valid = false;
         }

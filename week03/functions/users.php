@@ -55,20 +55,3 @@ function updateUser($user) {
      );
 }
 
-function emailExists($email) {
-    global $db;
-    $sql = "SELECT COUNT(email) FROM users WHERE email = ?";
-    $stmnt = $db->prepare($sql);
-    $stmnt->execute( [ $email ] );
-    $numberOfUsers = (int) $stmnt->fetchColumn();
-    return ( $numberOfUsers > 0 ) ;
-}
-
-function getUserById($user_id) {
-    global $db;
-    $sql = "SELECT * FROM users WHERE id = ?";
-    $stmnt = $db->prepare($sql);
-    $stmnt->execute( [ $user_id ] );
-    return $stmnt->fetchObject();
-
-}
