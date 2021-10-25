@@ -27,11 +27,16 @@ if(!file_exists($controller_path)) {
     exit;
 } 
 
+ob_start();
+
 require_once $controller_path;
 
-
 $controller_name = $controller . 'Controller';
-
 $controller = new $controller_name();
-
 $controller->{$method}($params);
+
+$content = ob_get_contents();
+ob_end_clean();
+
+include 'views/_templates/main.php';
+
