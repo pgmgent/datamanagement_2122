@@ -14,5 +14,4 @@ class ArticleController extends BaseController {
         $this->loadView();
     }
 
-    
 }

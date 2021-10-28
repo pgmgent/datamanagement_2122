@@ -20,7 +20,14 @@ class BaseModel {
         $pdo_statement = $db->prepare($sql);
         $pdo_statement->execute();
 
-        return $pdo_statement->fetchAll();  
+        $db_items = $pdo_statement->fetchAll(); 
+        $items = [] ;
+
+        foreach($db_items as $db_item) {
+            $items[] = $this->castDbObjectToModel($db_item);
+        }
+
+        return $items;
     }
 
     private function getById( int $id ) {
@@ -30,9 +37,26 @@ class BaseModel {
         $pdo_statement = $db->prepare($sql);
         $pdo_statement->execute( [ ':p_id' => $id ] );
 
-        return $pdo_statement->fetchObject();
+        $db_item = $pdo_statement->fetchObject();
+
+        return $this->castDbObjectToModel($db_item);
     }
 
+    private function castDbObjectToModel ($db_item) {
+
+        $db_item = (object) $db_item;
+        //Creates new Model
+        $model_name = get_class($this);
+        $item = new $model_name();
+        //Loops through the db columns and 
+        
+        foreach($db_item as $column => $value) {
+            $item->{$column} = $value;
+        } 
+        return $item;
+    }
+
+    //static method to call like: Model::deleteById(1);
     private function deleteById( int $id ) {
         global $db;
 
@@ -41,6 +65,7 @@ class BaseModel {
         return $pdo_statement->execute( [ ':p_id' => $id ] );
     }
 
+    //public method to call like: $my_model->delete();
     public function delete () {
         $this->deleteById( $this->{$pk} );
     }

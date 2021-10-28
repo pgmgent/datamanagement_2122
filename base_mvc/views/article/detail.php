@@ -5,6 +5,8 @@
 
 print_r( $article );
 
+echo $article->getShortContent();
+
 ?>
 
 <script>
