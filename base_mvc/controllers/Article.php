@@ -8,8 +8,8 @@ class ArticleController extends BaseController {
         $this->loadView();
     }
 
-    protected function detail ($params) {
-        $this->viewParams['article'] = Article::getById($params[0]);
+    protected function detail ($slug) {
+        $this->viewParams['article'] = Article::getBySlug($slug);
         
         $this->loadView();
     }

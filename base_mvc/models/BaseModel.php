@@ -42,7 +42,7 @@ class BaseModel {
         return $this->castDbObjectToModel($db_item);
     }
 
-    private function castDbObjectToModel ($db_item) {
+    protected function castDbObjectToModel ($db_item) {
 
         $db_item = (object) $db_item;
         //Creates new Model
